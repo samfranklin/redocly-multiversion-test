@@ -47,9 +47,10 @@ jobs:
           git checkout "origin/dev"
           npx @redocly/cli build-docs openapi.yaml --output=build/tip/index.html
           dirs="${dirs}<li><a href='tip/'>dev version</a> (dev branch)</li>"
+          echo $dirs
 
           # Generate index page
-          cat<<EOF>>build/index.html
+          cat <<EOF > build/index.html
           <html>
           <body>
           <h1>Persons API</h1>
@@ -59,7 +60,7 @@ jobs:
           EOF
 
           echo "Check generated index page content"
-          cat build/index.html          
+          echo $(cat build/index.html)
 
       - name: Upload HTML as an artifact
         uses: actions/upload-pages-artifact@v3
