@@ -24,8 +24,12 @@ jobs:
     concurrency:
       group: "pages" 
     steps:
-      - name: Checkout code
+      - name: Checkout
         uses: actions/checkout@v4
+        with:
+          # Fetch all commits so we can generate docs for each tagged commit
+          fetch-depth: 0
+          fetch-tags: true
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
