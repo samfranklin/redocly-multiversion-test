@@ -10,7 +10,7 @@ on:
       - main
 
 jobs:
-  build-and-deploy:
+  publish-multiple-versions:
     runs-on: ubuntu-latest
     environment:
       name: github-pages
@@ -44,6 +44,24 @@ jobs:
             npx @redocly/cli build-docs openapi.yaml --output=build/index.html
             exit 0
           fi
+
+          # Build separate version docs
+          git checkout "origin/main"
+          npx @redocly/cli build-docs openapi.yaml --output=build/tip/index.html
+          dirs="${dirs}<li><a href='tip/'>Tip version</a> (main branch)</li>"
+
+          # Generate index page
+          cat<<EOF>>build/index.html
+          <html>
+          <body>
+          <h1>Persons API</h1>
+          <ul>${dirs}</ul>
+          </body>
+          </html>
+          EOF
+
+          echo "Check generated index page content"
+          cat build/index.html          
 
       - name: Upload HTML as an artifact
         uses: actions/upload-pages-artifact@v3
