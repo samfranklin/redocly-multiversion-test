@@ -1,13 +1,7 @@
 name: Publish Redocly Docs to GitHub Pages
 
 on:
-  push:
-    branches:
-      - main
-      - dev
-  pull_request:
-    branches:
-      - main
+    workflow_dispatch:
 
 jobs:
   build-and-deploy:
@@ -37,6 +31,7 @@ jobs:
 
       - name: Generate Redoc HTML
         run: |
+          set -x
           redocly build-docs openapi.yaml --output=build/index.html
 
       - name: Upload HTML as an artifact
@@ -48,12 +43,3 @@ jobs:
         id: deployment
         uses: actions/deploy-pages@v4
 
-    #   - name: Deploy to GitHub Pages
-    #     uses: peaceiris/actions-gh-pages@v4
-    #     with:
-    #       github_token: ${{ secrets.GITHUB_TOKEN }}
-    #       publish_dir: .
-    #       publish_branch: gh-pages
-    #       keep_files: false
-    #       force_orphan: true
-    #       cname: ''

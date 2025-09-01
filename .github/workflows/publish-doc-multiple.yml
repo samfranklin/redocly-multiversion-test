@@ -1,0 +1,56 @@
+name: Publish Redocly Docs to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+      - dev
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    # Allow only one concurrent deployment
+    concurrency:
+      group: "pages" 
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+
+      - name: Install Redocly CLI
+        run: npm install -g @redocly/cli
+
+      - name: Generate Redoc HTML
+        run: |
+          set -x
+          if [ -z "$(git tag)" ]; then
+            echo "There are no git tags to render"
+
+            npx @redocly/cli build-docs openapi.yaml --output=build/index.html
+            exit 0
+          fi
+
+      - name: Upload HTML as an artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: "build/"
+          
+      - name: Publish to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
