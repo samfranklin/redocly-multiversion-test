@@ -19,3 +19,21 @@ paths:
                   message:
                     type: string
                     example: Hello, world!
+
+  /info:
+    get:
+      summary: info
+      responses:
+        '200':
+          description: Information response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  version:
+                    type: string
+                    example: 1.0.0
+                  description:
+                    type: string
+                    example: API information
