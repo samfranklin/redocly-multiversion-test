@@ -7,7 +7,7 @@ servers:
 paths:
   /hello:
     get:
-      summary: Returns a greeting
+      summary: hello
       responses:
         '200':
           description: A successful response
