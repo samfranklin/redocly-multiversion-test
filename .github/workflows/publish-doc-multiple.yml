@@ -44,9 +44,9 @@ jobs:
           set -x
 
           # Build separate version docs
-          git checkout "origin/main"
+          git checkout "origin/dev"
           npx @redocly/cli build-docs openapi.yaml --output=build/tip/index.html
-          dirs="${dirs}<li><a href='tip/'>Tip version</a> (main branch)</li>"
+          dirs="${dirs}<li><a href='tip/'>dev version</a> (dev branch)</li>"
 
           # Generate index page
           cat<<EOF>>build/index.html
