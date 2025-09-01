@@ -43,10 +43,19 @@ jobs:
         run: |
           set -x
 
-          # Build separate version docs
+          # Build dev version of docs
           git checkout "origin/dev"
           npx @redocly/cli build-docs openapi.yaml --output=build/tip/index.html
           dirs="${dirs}<li><a href='tip/'>dev version</a> (dev branch)</li>"
+
+          for tag in `git tag`; do
+            echo "Building docs for tag '$tag' ..."
+            git checkout "tags/$tag"
+            npx @redocly/cli build-docs openapi.yaml --output="build/${tag}/index.html"
+            dirs="${dirs}<li><a href='${tag}/'>Version ${tag}</a></li>"
+          done
+
+          # echo list
           echo $dirs
 
           # Generate index page
