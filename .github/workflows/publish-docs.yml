@@ -7,7 +7,7 @@ on:
   pull_request:
     branches:
       - main
-      
+
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
@@ -36,8 +36,13 @@ jobs:
 
       - name: Generate Redoc HTML
         run: |
-          redocly build-docs openapi.yaml -o index.html
+          redocly build-docs openapi.yaml --output=build/index.html
 
+      - name: Upload HTML as an artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: "build/"
+          
       - name: Publish to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
