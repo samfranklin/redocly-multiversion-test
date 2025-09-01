@@ -38,12 +38,6 @@ jobs:
       - name: Generate Redoc HTML
         run: |
           set -x
-          if [ -z "$(git tag)" ]; then
-            echo "There are no git tags to render"
-
-            npx @redocly/cli build-docs openapi.yaml --output=build/index.html
-            exit 0
-          fi
 
           # Build separate version docs
           git checkout "origin/main"
